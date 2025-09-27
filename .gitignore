@@ -1,0 +1,5 @@
+# Exclui a pasta node_modules em qualquer lugar do projeto
+node_modules/
+
+# Exclui o arquivo .env dentro da pasta backend
+backend/.env

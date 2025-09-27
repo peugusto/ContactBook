@@ -1,0 +1,33 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap');
+
+
+html{
+    background-color: #48426D;
+    font-family: "JetBrains Mono", monospace;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+
+
+.Toastify__close-button {
+  width: auto !important;           
+  max-width: none !important;
+  padding: 0.25rem;                  
+  background-color: tra;
+  border: none;
+  color: inherit;                    
+  flex: none;
+  box-shadow: none;                      
+}
+.Toastify__close-button:hover{
+    background-color: white;
+}
