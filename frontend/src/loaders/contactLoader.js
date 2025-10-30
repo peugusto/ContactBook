@@ -1,7 +1,8 @@
 import { redirect } from "react-router-dom"
 
 export async function getContacts(){
-    const response = await fetch('/api/contacts')
+      
+    const response = await fetch(`/api/contacts`)
     const result = await response.json()
         
           if (!response.ok) {
@@ -10,7 +11,8 @@ export async function getContacts(){
           
 
           return{
-            contacts: result.contacts,
-            name: result.name
+            contactsLoader: result.contacts,
+            name: result.name,
+            paginationLoader: result.pagination,
           }
 }

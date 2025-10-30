@@ -1,12 +1,33 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Header } from "../layouts/Header";
 import { useLoaderData, useNavigate } from "react-router-dom";
-import { ToastContainer, toast, Bounce } from 'react-toastify';
+import { toast } from 'react-toastify';
+import NextPrevious from "../components/NextPrevious";
 
 export default function HomePage(){
     const navigate = useNavigate()
-    const { contacts, name } = useLoaderData();
+    const { contactsLoader, name, paginationLoader} = useLoaderData();
 
+    const [contacts , setContact] = useState(contactsLoader)
+    const [pagination, setPagination] = useState(paginationLoader)
+    console.log(contacts)
+    const fetchPage = async(url) =>{
+      const endpoint = url ? `${url}` : '/api/contacts'
+      try {
+        const response = await fetch(endpoint)
+        const result = await response.json()
+        if (result){
+          setContact(result.contacts)
+          setPagination(result.pagination)
+          window.scrollTo({
+            top:0,
+            behavior:'smooth'
+          });
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    }
     const deleteContact = async(_id) =>{
       try {
         const response = await fetch('/api/contacts', {
@@ -42,8 +63,8 @@ export default function HomePage(){
           <li key={contact._id}>
             <div className="contactsContent">
                   <h2>{contact.name}</h2>
-                  <p><i class="fa-solid fa-phone"></i> {contact.phone}</p>
-                  <p><i class="fa-solid fa-location-dot"></i> {contact.address}</p>
+                  <p><i className="fa-solid fa-phone"></i> {contact.phone}</p>
+                  <p><i className="fa-solid fa-location-dot"></i> {contact.address}</p>
                   <div className="buttonBetween">
                   <button onClick={() => navigate(`/contactform?id=${contact._id}`)}>EDIT</button><button onClick={() => deleteContact(contact._id)}>DELETE</button>
                   </div>
@@ -53,11 +74,11 @@ export default function HomePage(){
       </ul>
     );
   }
-    console.log('render homepage')
     return(
         <>
         <Header name={name}/>
         {content}
+        {content && <NextPrevious pagination={pagination} onPage={fetchPage}/>}
         </>
     )
 }

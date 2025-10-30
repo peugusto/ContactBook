@@ -3,12 +3,13 @@ import cors from 'cors';
 import apiRouter from './src/routes/api.js';
 import {db,store} from './src/config/db.js';
 import session from 'express-session';
+import helmet from 'helmet'
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({extended:true}))
-
+app.use(helmet())
 
 app.use(session({
     secret:'18899881',

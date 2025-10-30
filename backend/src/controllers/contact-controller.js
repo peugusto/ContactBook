@@ -1,4 +1,5 @@
 import Contact from "../models/Contact.js";
+import {findAllContacts,countContact} from "../utils/getContacts.js";
 
 const contactController = {
     addContact: async (req,res) =>{
@@ -12,7 +13,7 @@ const contactController = {
         const newContact = new Contact({name:name,address:address,phone:phone,belongsTo:userID})
         await newContact.save()
         
-        res.status(200).json({message:"contact was created"})
+        res.status(200).json({message:"contact was created",contact:newContact})
 
         } catch (error) {
             res.status(500).json({message:error})
@@ -58,23 +59,38 @@ const contactController = {
     },
     getContacts: async (req,res) =>{
         const {userID,name} = req.session;
-
         if (!userID) return res.status(500).json({message:'userID not found'})
 
-        const contacts = await Contact.find({belongsTo:userID});
+        const currentUrl = req.baseUrl
+
+        let {limit, offset} = req.query;
+        limit = Number(limit)
+        offset = Number(offset)
+
+        if (!limit) limit = 5;
+        if (!offset) offset = 0;
+
+
+        const contacts = await findAllContacts(offset,limit,userID)
+        const total = await countContact();
+        const next = offset + limit;
+        const nextUrl = next < total ? `${currentUrl}/contacts?limit=${limit}&offset=${next}` : null;
+        const previous = offset - limit < 0 ? null : offset - limit;
+        const previousUrl = previous != null ? `${currentUrl}/contacts?limit=${limit}&offset=${previous}`:null;
         
-        res.status(200).json({contacts: contacts,name:name})
+        
+        res.status(200).json({contacts: contacts,name:name,pagination: {
+            nextUrl,
+            previousUrl
+        }})
     },
     getContact: async (req,res) =>{
         const {id} = req.params
-        // const {userID} = req.session
+
 
         try {
             
             if (!id) throw new Error('ID not found')
-            // if (id !== userID) throw new Error('User not authenticated')
-
-
             const contact = await Contact.find({_id:id})
 
             if(!contact) throw new Error('contact not found')

@@ -31,7 +31,7 @@ export function Header({name}){
             <div className="headerPage">
                 <p>Hello, {name}.</p>
                     <div className="buttonBetween">
-                    <button id="buttonADD" onClick={() => navigate('/contactform')}><i class="fa-solid fa-user-plus"></i></button> <button onClick={logout} id="buttonLOGOUT"><i class="fa-solid fa-right-from-bracket"></i></button>
+                    <button id="buttonADD" onClick={() => navigate('/contactform')}><i className="fa-solid fa-user-plus"></i></button> <button onClick={logout} id="buttonLOGOUT"><i className="fa-solid fa-right-from-bracket"></i></button>
             </div>
                 
             </div>
